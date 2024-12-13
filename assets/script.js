@@ -18,23 +18,37 @@ const slides = [
 ];
 
 let diapositiveActuelle = 0; //pour utilisation du tableau
-const carouselSlide = document.querySelector(".banner-img"); //Dans index.html, l'image du banner 
+const carouselSlide = document.querySelector(".banner-img"); //Dans index.html, récupération de l'image du banner
 
-function afficherDiapositive () {
+function afficherDiapositive() {
+	//mise à jour l'image
 	carouselSlide.src = slides[diapositiveActuelle].image; //source const = dans tableau, diapo n°x des images
 
-	const tagline = document.querySelector("#banner p"); //Dans index.html, le paragraphe dans #banner
+	//mise à jour de la tagLine
+	const tagline = document.querySelector("#banner p"); //Dans index.html, récupération paragraphe dans #banner
 	tagline.innerHTML = slides[diapositiveActuelle].tagLine; //texte const = dans tableau, tagLine n°y des images
-	
-	const dots = document.querySelectorAll(".dot"); //Dans index.html, le bullet pt dans les <div> 
-	dots.forEach((dot, i) => { // pour chaque élément de la collection dots
-		if (i === diapositiveActuelle) { //Si i de l'élément actuel === diapo actuelle, b-pt cor image affichée
-			dot.classList.add("dot_selected"); //Si b-pt cor image affichée, ".dot_selected"
-		} else { //sinon
-			dot.classList.remove("dot_selected");// b-pt cor pas image affichée, pas ".dot_selected"
+
+	//boucle pour mettre à jour les .dot
+	const dots = document.querySelectorAll(".dot");// Récupération des div créées avec JS dans index.html
+	dots.forEach((dot, index) => { //pour chaque élément dot
+		if (index === diapositiveActuelle) { //Si index de la b-pt actuelle === diapo actuelle
+			dot.classList.add("dot_selected"); //Si b-pt cor image affichée, ajout de la class nommée dot_selected
+		} else { //Sinon
+			dot.classList.remove("dot_selected"); // enlever la class dot_selected
 		}
 	})
 }
+
+	//création des bullets points au début
+const parent = document.querySelector(".dots");//Dans index.html, récupération de la div parent
+slides.forEach((_, i) => { // Pour chaque slide 
+	const div = document.createElement("div");// Dans index.html, création des div pour les b-pts
+	div.classList.add("dot");// Pour les div créées, ajout de la class nommée dot
+	if (i === diapositiveActuelle) { //Si i de la b-pt actuelle === diapo actuelle
+		div.classList.add("dot_selected"); //Si b-pt cor image affichée, ajout de la class nommée dot_selected
+	}
+	parent.appendChild(div);//lie les div créées à index.html = insertion des div dans l'arbre DOM (=endroit)
+})
 
 document.querySelector(".prev").addEventListener("click", function() {//écouteur d'événement de ".prev"
 	diapositiveActuelle = (diapositiveActuelle - 1 + slides.length) % slides.length; /* opération modulo (%)
@@ -43,7 +57,7 @@ document.querySelector(".prev").addEventListener("click", function() {//écouteu
 	Calcul si on a la 1ère slide du tableau (diapositiveActuelle = 0) : 
 	(0 - 1 + 4) % 4 = 3 % 4 = 3 puisque 3/4 = 0 reste 3 donc la dernière slide est affichée ensuite !*/
 
-  	afficherDiapositive(); // on appelle la fonction pour mettre à jour la slide du carousel
+  	afficherDiapositive(); // on appelle la fonction pour mettre à jour la slide et le b-pt selected du carousel
 })
 
 document.querySelector(".next").addEventListener("click", function() { //écouteur d'événement de ".next"
@@ -54,6 +68,7 @@ document.querySelector(".next").addEventListener("click", function() { //écoute
   	afficherDiapositive();
 })
 
-afficherDiapositive(); //initialisation du carousel
+//initialisation de la 1ère diapo
+afficherDiapositive(); 
 
 
